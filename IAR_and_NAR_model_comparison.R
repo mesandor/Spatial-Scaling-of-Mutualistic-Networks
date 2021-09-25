@@ -385,23 +385,3 @@ sse.table <- data.frame(cbind(model = c("IAR", "LSSL", "CCH")),
                         rbind(quantile(SumSquaresIAR.A, 0.975), quantile(SumSquaresLSSL.A, 0.975), quantile(SumSquaresCCH.A, 0.975)))
 colnames(sse.table) <- c("model", "seeds.mean", "seeds.l95", "seeds.u95", "grass.mean", "grass.l95", "grass.u95", "ant.mean", "ant.l95", "ant.u95")
 write.csv(sse.table, file = paste0("Table1_",Sys.Date(),".csv"))
-
-############################ NOT CORRECT FOR ABOVE CODE AND MAY NOT NEED THIS ##############################################
-### Calculate R^2
-pred.IA.S.R <- array(dim = c(length(param.S$log.c1), length(Seeds$Patch_Area_m2)))
-pred.IA.G.R <- array(dim = c(length(param.S$log.c1), length(Grass1$Patch_Area_m2)))
-pred.IA.A.R <- array(dim = c(length(param.S$log.c1), length(Sugiara$Patch_Area_m2)))
-r2.S <- mat.or.vec(nr=length(param.S$log.c2), nc=1)
-r2.G <- mat.or.vec(nr=length(param.S$log.c2), nc=1)
-r2.A <- mat.or.vec(nr=length(param.S$log.c2), nc=1)
-
-for(i in 1:length(param.S$log.c2)) {
-  pred.IA.S.R[i, ] <- param.S$alpha[i] + param.S$log.c1[i] + param.S$log.c2[i] + (param.S$delta[i] + param.S$z1[i] + param.S$z2[i]) * log10(Seeds$Patch_Area_m2)
-  r2.S[i] <- (cor(log10(Seeds$No_Int), pred.IA.S.R[i,]))^2
-  
-  pred.IA.G.R[i, ] <- param.G$alpha[i] + param.G$log.c1[i] + param.G$log.c2[i] + (param.G$delta[i] + param.G$z1[i] + param.G$z2[i]) * log10(Grass1$Patch_Area_m2)
-  r2.G[i] <- (cor(log10(Grass1$No_Int), pred.IA.G.R[i,]))^2  
-  
-  pred.IA.A.R[i, ] <- param.A$alpha[i] + param.A$log.c1[i] + param.A$log.c2[i] + (param.A$delta[i] + param.A$z1[i] + param.A$z2[i]) * log10(Sugiara$Patch_Area_m2)
-  r2.A[i] <- (cor(log10(Sugiara$No_Int), pred.IA.A.R[i,]))^2  
-}
